@@ -3,13 +3,14 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 const router = express.Router();
 import jwt from "jsonwebtoken";
+
+import { check, validationResult } from "express-validator";
+import { createError } from "../utils/error.js";
 import {
   verifyToken,
-  verifyAdmin,
   verifyUser,
+  verifyAdmin,
 } from "../middlewares/authMiddleware.js";
-import { check, validationResult } from "express-validator";
-import { createError } from "../../utils/error.js";
 // import nodemailer from "nodemailer";
 // import Handlebars from "handlebars";
 import fs from "fs";
@@ -49,14 +50,12 @@ router.post(
       await user.save();
 
       const payload = {
-        user: {
-          id: user.id,
-          isAdmin: user.isAdmin,
-        },
+        id: user.id,
+        isAdmin: user.isAdmin,
       };
 
       // generate and return jwt
-      jwt.sign(payload, process.env.JWT, (err, token) => {
+      jwt.sign(payload, "jwtstring", (err, token) => {
         if (err) throw err;
         res
           .cookie("access_token", token, {
@@ -96,20 +95,17 @@ router.post(
       }
 
       const isMatch = await bcrypt.compare(req.body.password, user.password);
-      console.log("isMatch", isMatch);
       if (!isMatch)
         return next(
           createError(400, { errors: [{ msg: "Invalid Credentials" }] })
         );
       const payload = {
-        user: {
-          id: user.id,
-          isAdmin: user.isAdmin,
-        },
+        id: user.id,
+        isAdmin: user.isAdmin,
       };
 
       // generate and return jwt
-      jwt.sign(payload, process.env.JWT, (err, token) => {
+      jwt.sign(payload, "jwtstring", (err, token) => {
         if (err) throw err;
         res
           .cookie("access_token", token, {
@@ -123,6 +119,38 @@ router.post(
     }
   }
 );
+
+router.get("/", async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:user_id", async (req, res, next) => {
+  try {
+    if (req.body.password) {
+      //hash password
+      var salt = bcrypt.genSaltSync(10);
+      var hashedPassword = bcrypt.hashSync(req.body.password, salt);
+      req.body.password = hashedPassword;
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.user_id,
+      {
+        $set: req.body,
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // router.post("/forgot-password/:email", async (req, res, next) => {
 //   try {
