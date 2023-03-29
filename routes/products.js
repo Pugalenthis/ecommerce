@@ -11,7 +11,7 @@ import { createError } from "../utils/error.js";
 import { check, validationResult } from "express-validator";
 
 // @route   POST /api/products
-// @desc    create a produdct
+// @desc    create a product
 // @access  private
 
 router.post(
@@ -51,8 +51,23 @@ router.post(
 
 router.get("/getallproducts", async (req, res, next) => {
   try {
-    const products = await Product.find({}).sort({ date: -1 });
-    res.status(200).json(products);
+    const pageSize = 10;
+    const page = Number(req.query.pageNumber) || 1;
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
+      : {};
+    const count = await Product.countDocuments({ ...keyword });
+    const products = await Product.find({ ...keyword })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+    res
+      .status(200)
+      .json({ products, page, pageSize: Math.ceil(count / pageSize) });
   } catch (error) {
     next(error);
   }
@@ -89,124 +104,113 @@ router.delete(
   }
 );
 
+// @route   PUT /api/products/:product_id
+// @desc    update a product
+// @access  private
+
+router.put("/:product_id", verifyToken, verifyAdmin, async (req, res, next) => {
+  try {
+    // const product = await Product.findOne({ _id: req.params.post_id });
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: req.params.product_id },
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // @route   PUT /api/post/like/:post_id
 // @desc    like a post
 // @access  private
 
-router.put("/like/:post_id", async (req, res, next) => {
-  try {
-    let like = { user: req.user.id };
-
-    const post = await Post.findOne({ _id: req.params.post_id });
-    if (post.likes.some((like) => like.user.toString() == req.user.id)) {
-      return next(createError(400, "you have already liked the post"));
-    }
-    const updatedPost = await Post.findOneAndUpdate(
-      { _id: req.params.post_id },
-      {
-        $push: { likes: like },
-      },
-      { new: true }
-    );
-    res.status(200).json(updatedPost);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// @route   PUT /api/post/unlike/:post_id
-// @desc    unlike a post
-// @access  private
-
-router.put("/unlike/:post_id", async (req, res, next) => {
-  try {
-    let unlike = { user: req.user.id };
-    const post = await Post.findOne({ _id: req.params.post_id });
-    if (!post.likes.some((like) => like.user.toString() == req.user.id)) {
-      return next(createError(400, "you haven't liked the post"));
-    }
-    const updatedPost = await Post.findOneAndUpdate(
-      { _id: req.params.post_id },
-      {
-        $pull: { likes: unlike },
-      },
-      {
-        new: true,
-      }
-    );
-    res.status(200).json(updatedPost);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// @route   PUT /api/post/comment/:post_id
-// @desc    comment a post
-// @access  private
-
 router.put(
-  "/comment/:post_id",
-  check("text", "Text is Required").notEmpty(),
-
+  "/review/:product_id",
+  verifyToken,
+  verifyAdmin,
   async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return next(createError(400, { errors: errors.array() }));
-    }
-
     try {
-      const user = await User.findOne({ _id: req.user.id });
-      const comment = {
-        ...req.body,
-        user: req.user.id,
-        name: user.name,
-        avatar: user.avatar,
-      };
-      const post = await Post.findOneAndUpdate(
-        { _id: req.params.post_id },
+      const post = await Product.findOne({ _id: req.params.product_id });
+      if (
+        post.reviews.some((review) => review.user.toString() == req.user.id)
+      ) {
+        return next(createError(400, "you have already review the post"));
+      }
+
+      console.log({ ...req.body, user: req.user.id });
+      const updatedProduct = await Product.findOneAndUpdate(
+        { _id: req.params.product_id },
         {
-          $push: { comments: comment },
+          $push: { reviews: { ...req.body, user: req.user.id } },
         },
-        {
-          new: true,
-        }
+        { new: true }
       );
-      res.status(200).json(post);
+      res.status(200).json(updatedProduct);
     } catch (error) {
       next(error);
     }
   }
 );
 
-// @route   PUT /api/post/unlike/:post_id
-// @desc    delete a comment
-// @access  private
+// // @route   PUT /api/post/unlike/:post_id
+// // @desc    unlike a post
+// // @access  private
 
-router.put("/delete/:post_id/:comment_id", async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      _id: req.params.post_id,
-    });
-    let comment = post.comments.find(
-      (comment) => comment._id == req.params.comment_id
-    );
+// router.put("/unlike/:post_id", async (req, res, next) => {
+//   try {
+//     let unlike = { user: req.user.id };
+//     const post = await Post.findOne({ _id: req.params.post_id });
+//     if (!post.likes.some((like) => like.user.toString() == req.user.id)) {
+//       return next(createError(400, "you haven't liked the post"));
+//     }
+//     const updatedPost = await Post.findOneAndUpdate(
+//       { _id: req.params.post_id },
+//       {
+//         $pull: { likes: unlike },
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.status(200).json(updatedPost);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-    if (comment.user.toString() != req.user.id) {
-      return next(createError(400, "you are not authorized"));
-    }
-    const updatedPost = await Post.findOneAndUpdate(
-      { _id: req.params.post_id },
-      {
-        $pull: { comments: { _id: req.params.comment_id } },
-      },
-      {
-        new: true,
-      }
-    );
-    res.status(200).json(updatedPost);
-  } catch (error) {
-    next(error);
-  }
-});
+// // @route   PUT /api/post/unlike/:post_id
+// // @desc    delete a comment
+// // @access  private
+
+// router.put("/delete/:post_id/:comment_id", async (req, res, next) => {
+//   try {
+//     const post = await Post.findOne({
+//       _id: req.params.post_id,
+//     });
+//     let comment = post.comments.find(
+//       (comment) => comment._id == req.params.comment_id
+//     );
+
+//     if (comment.user.toString() != req.user.id) {
+//       return next(createError(400, "you are not authorized"));
+//     }
+//     const updatedPost = await Post.findOneAndUpdate(
+//       { _id: req.params.post_id },
+//       {
+//         $pull: { comments: { _id: req.params.comment_id } },
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.status(200).json(updatedPost);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 export default router;

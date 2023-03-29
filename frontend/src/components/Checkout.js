@@ -24,7 +24,7 @@ const Checkout = () => {
                     type="email"
                     id="email-address"
                     name="email-address"
-                    autocomplete="email"
+                    autoComplete="email"
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -49,7 +49,7 @@ const Checkout = () => {
                       type="text"
                       id="first-name"
                       name="first-name"
-                      autocomplete="given-name"
+                      autoComplete="given-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -67,7 +67,7 @@ const Checkout = () => {
                       type="text"
                       id="last-name"
                       name="last-name"
-                      autocomplete="family-name"
+                      autoComplete="family-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -102,7 +102,7 @@ const Checkout = () => {
                       type="text"
                       name="address"
                       id="address"
-                      autocomplete="street-address"
+                      autoComplete="street-address"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -137,7 +137,7 @@ const Checkout = () => {
                       type="text"
                       name="city"
                       id="city"
-                      autocomplete="address-level2"
+                      autoComplete="address-level2"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -154,7 +154,7 @@ const Checkout = () => {
                     <select
                       id="country"
                       name="country"
-                      autocomplete="country-name"
+                      autoComplete="country-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option>United States</option>
@@ -176,7 +176,7 @@ const Checkout = () => {
                       type="text"
                       name="region"
                       id="region"
-                      autocomplete="address-level1"
+                      autoComplete="address-level1"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -194,7 +194,7 @@ const Checkout = () => {
                       type="text"
                       name="postal-code"
                       id="postal-code"
-                      autocomplete="postal-code"
+                      autoComplete="postal-code"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -212,7 +212,7 @@ const Checkout = () => {
                       type="text"
                       name="phone"
                       id="phone"
-                      autocomplete="tel"
+                      autoComplete="tel"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -266,9 +266,9 @@ const Checkout = () => {
                       aria-hidden="true"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
 
@@ -317,9 +317,9 @@ const Checkout = () => {
                       aria-hidden="true"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
 
@@ -399,7 +399,7 @@ const Checkout = () => {
                       type="text"
                       id="card-number"
                       name="card-number"
-                      autocomplete="cc-number"
+                      autoComplete="cc-number"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -417,7 +417,7 @@ const Checkout = () => {
                       type="text"
                       id="name-on-card"
                       name="name-on-card"
-                      autocomplete="cc-name"
+                      autoComplete="cc-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -435,7 +435,7 @@ const Checkout = () => {
                       type="text"
                       name="expiration-date"
                       id="expiration-date"
-                      autocomplete="cc-exp"
+                      autoComplete="cc-exp"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -453,7 +453,7 @@ const Checkout = () => {
                       type="text"
                       name="cvc"
                       id="cvc"
-                      autocomplete="csc"
+                      autoComplete="csc"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -505,9 +505,9 @@ const Checkout = () => {
                             aria-hidden="true"
                           >
                             <path
-                              fill-rule="evenodd"
+                              fillRule="evenodd"
                               d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
-                              clip-rule="evenodd"
+                              clipRule="evenodd"
                             />
                           </svg>
                         </button>
@@ -520,7 +520,7 @@ const Checkout = () => {
                       </p>
 
                       <div className="ml-4">
-                        <label for="quantity" className="sr-only">
+                        <label htmlFor="quantity" className="sr-only">
                           Quantity
                         </label>
                         <select

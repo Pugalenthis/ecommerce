@@ -32,11 +32,11 @@ router.post(
     if (!errors.isEmpty()) {
       return next(createError(500, { errors: errors.array() }));
     }
-    const { email, name, password } = req.body;
+
     try {
       // check user exists
-      let user = await User.findOne({ email });
-      if (user) {
+      let alreadyUser = await User.findOne({ email: req.body.email });
+      if (alreadyUser) {
         return next(
           createError(400, { errors: [{ msg: "User already exists" }] })
         );
@@ -46,7 +46,11 @@ router.post(
       var salt = bcrypt.genSaltSync(10);
       var hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-      user = new User({ email, name, password: hashedPassword });
+      var user = new User({
+        email: req.body.email,
+        name: req.body.name,
+        password: hashedPassword,
+      });
       await user.save();
 
       const payload = {
@@ -62,7 +66,13 @@ router.post(
             httpOnly: true,
           })
           .status(200)
-          .json({ token });
+          .json({
+            token,
+            email: user.email,
+            _id: user._id,
+            name: user.name,
+            isAdmin: user.isAdmin,
+          });
       });
     } catch (error) {
       next(error);
@@ -88,6 +98,7 @@ router.post(
     const { email, password } = req.body;
     try {
       const user = await User.findOne({ email });
+
       if (!user) {
         return next(
           createError(400, { errors: [{ msg: "Invalid Credentials" }] })
@@ -112,7 +123,13 @@ router.post(
             httpOnly: true,
           })
           .status(200)
-          .json({ token });
+          .json({
+            token,
+            name: user.name,
+            _id: user._id,
+            email: user.email,
+            isAdmin: user.isAdmin,
+          });
       });
     } catch (error) {
       next(error);
@@ -124,6 +141,15 @@ router.get("/", async (req, res, next) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:user_id", async (req, res, next) => {
+  try {
+    const user = await User.find({ _id: req.params.user_id });
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }

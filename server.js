@@ -6,11 +6,13 @@ import mongoose from "mongoose";
 import userRoute from "./routes/users.js";
 import orderRoute from "./routes/orders.js";
 import productRoute from "./routes/products.js";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 mongoose.set("strictQuery", false);
 
 connectDB();
