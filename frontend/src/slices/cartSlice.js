@@ -3,9 +3,7 @@ import { current } from "@reduxjs/toolkit";
 
 const initialState = {
   cartItems: [],
-  totalItemsAmount: 0,
-  totalShippingAmount: 0,
-  totalAmount: 0,
+  shippingAddress: {},
 };
 
 export const cartSlice = createSlice({
@@ -16,13 +14,29 @@ export const cartSlice = createSlice({
       let isAlreadyExistingItem = current(state.cartItems).find(
         (item) => item._id == action.payload._id
       );
-      console.log("isALreadyExistingItem", isAlreadyExistingItem);
       if (isAlreadyExistingItem) {
+        return {
+          ...state,
+          cartItems: state.cartItems.map((cartItem) =>
+            cartItem._id === isAlreadyExistingItem._id
+              ? isAlreadyExistingItem
+              : cartItem
+          ),
+        };
+      } else {
+        state.cartItems.push(action.payload);
       }
-      state.cartItems.push(action.payload);
+    },
+    removeItemFromCart: (state, action) => {
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (item) => item._id !== action.payload
+        ),
+      };
     },
   },
 });
 
-export const { addItemToCart } = cartSlice.actions;
+export const { addItemToCart, removeItemFromCart } = cartSlice.actions;
 export default cartSlice.reducer;
