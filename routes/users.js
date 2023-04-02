@@ -37,9 +37,7 @@ router.post(
       // check user exists
       let alreadyUser = await User.findOne({ email: req.body.email });
       if (alreadyUser) {
-        return next(
-          createError(400, { errors: [{ msg: "User already exists" }] })
-        );
+        return next(createError(400, { message: "User already exists" }));
       }
 
       //hash password
@@ -101,14 +99,14 @@ router.post(
 
       if (!user) {
         return next(
-          createError(400, { errors: [{ msg: "Invalid Credentials" }] })
+          createError(400, { errors: [{ message: "Invalid Credentials" }] })
         );
       }
 
       const isMatch = await bcrypt.compare(req.body.password, user.password);
       if (!isMatch)
         return next(
-          createError(400, { errors: [{ msg: "Invalid Credentials" }] })
+          createError(400, { errors: [{ message: "Invalid Credentials" }] })
         );
       const payload = {
         id: user.id,
@@ -137,7 +135,7 @@ router.post(
   }
 );
 
-router.get("/", async (req, res, next) => {
+router.get("/", verifyToken, verifyAdmin, async (req, res, next) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);
@@ -146,16 +144,19 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:user_id", async (req, res, next) => {
+router.get("/user", verifyToken, async (req, res, next) => {
   try {
-    const user = await User.find({ _id: req.params.user_id });
+    const user = await User.find({
+      _id: req.query.user_id || req.user.id,
+    }).select("-password");
+    console.log("user", user);
     res.status(200).json(user);
   } catch (error) {
     next(error);
   }
 });
 
-router.put("/:user_id", async (req, res, next) => {
+router.put("/:user_id", verifyToken, verifyUser, async (req, res, next) => {
   try {
     if (req.body.password) {
       //hash password

@@ -10,19 +10,33 @@ import Checkout from "./components/Checkout";
 import OrderPreview from "./components/OrderPreview";
 import Profile from "./components/Profile";
 import UsersList from "./components/UsersList";
-import ProductsList from "./ProductsList";
+import ProductsList from "./components/ProductsList";
 import ApproveAdmin from "./components/ApproveAdmin";
 import CreateProductForm from "./components/CreateProductForm";
 import Footer from "./components/Footer";
 import ConfirmedOrder from "./components/ConfirmedOrder";
 import OrdersList from "./components/OrdersList";
 import ApproveOrder from "./components/ApproveOrder";
+import React, { useEffect } from "react";
+import Alert from "./components/Alert";
+import { setAuthToken } from "./utils/setAuthToken";
+import { useDispatch } from "react-redux";
+import { loadUser } from "./actions/auth";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+      dispatch(loadUser());
+    }
+  }, []);
+
   return (
     <div>
       <Router>
         <Navbar />
+        <Alert />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />

@@ -78,8 +78,10 @@ router.get("/getallproducts", async (req, res, next) => {
 // @access  public
 
 router.get("/:product_id", async (req, res, next) => {
+  console.log("entered into get single product", req.params);
   try {
     const product = await Product.findOne({ _id: req.params.product_id });
+    console.log(product);
     res.status(200).json(product);
   } catch (error) {
     next(error);

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/auth";
 
 const Login = () => {
@@ -10,10 +10,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    console.log({
-      email: emailInputRef.current.value,
-      password: passwordInputRef.current.value,
-    });
+
     dispatch(
       login({
         email: emailInputRef.current.value,
@@ -22,6 +19,11 @@ const Login = () => {
     );
   };
 
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
+  }
   return (
     <div>
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { current } from "@reduxjs/toolkit";
 
 const initialState = [];
 
@@ -10,8 +11,7 @@ export const alertSlice = createSlice({
       state.push(action.payload);
     },
     removeAlert: (state, action) => {
-      console.log(state.filter((item) => item.id != action.payload.id));
-      state = state.filter((item) => item.id != action.payload.id);
+      return state.filter((item) => item.id != action.payload.id);
     },
   },
 });
