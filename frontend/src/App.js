@@ -7,7 +7,7 @@ import Register from "./components/Register";
 import Landing from "./components/Landing";
 import ViewProduct from "./components/ViewProduct";
 import Checkout from "./components/Checkout";
-import OrderPreview from "./components/OrderPreview";
+
 import Profile from "./components/Profile";
 import UsersList from "./components/UsersList";
 import ProductsList from "./components/ProductsList";
@@ -44,7 +44,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ViewProduct />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/orderpreview" element={<OrderPreview />} />
+
           <Route path="/orders" element={<OrdersList />} />
           <Route path="/confirmedorder" element={<ConfirmedOrder />} />
           <Route path="/profile" element={<Profile />} />

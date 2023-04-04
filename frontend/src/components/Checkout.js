@@ -1,30 +1,75 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { removeItemFromCart, updateShippingAddress } from "../slices/cartSlice";
 
 const Checkout = () => {
+  const nameInputRef = useRef("");
+  const addressInputRef = useRef("");
+  const cityInputRef = useRef("");
+  const countryInputRef = useRef("");
+  const postalCodeInputRef = useRef("");
+  const phoneNumberInputRef = useRef("");
+
+  const { cartItems } = useSelector((state) => state.cart);
+  console.log("cart in cart", cartItems);
+
+  const dispatch = useDispatch();
+  const removeCartItem = (id) => {
+    dispatch(removeItemFromCart(id));
+  };
+
+  let totalItemsAmount =
+    cartItems.length > 0
+      ? cartItems.reduce((previous, current) => {
+          let currentItemTotal = current.qty * current.price;
+          return previous + currentItemTotal;
+        }, 0)
+      : 0;
+
+  let totalCartItemsAmount = totalItemsAmount + 5 + 8;
+
+  const createOrder = (e) => {
+    e.preventDefault();
+    let shippingAddress = {
+      phoneNumber: phoneNumberInputRef.current.value,
+      city: cityInputRef.current.value,
+      country: countryInputRef.current.value,
+      address: addressInputRef.current.value,
+      postalCode: postalCodeInputRef.current.value,
+      nameInputRef: nameInputRef.current.value,
+    };
+    dispatch(updateShippingAddress(shippingAddress));
+  };
+
   return (
     <div className="bg-gray-50">
       <div className="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Checkout</h2>
-        <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+        <form
+          onSubmit={createOrder}
+          className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16"
+        >
           <div>
             <div>
-              <h2 className="text-lg font-medium text-gray-900">
+              <h2 className="text-lg font-medium text-gray-900 mb-4">
                 Contact information
               </h2>
 
-              <div className="mt-4">
+              <div className="sm:col-span-2">
                 <label
-                  for="email-address"
+                  for="phone"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email address
+                  Phone
                 </label>
                 <div className="mt-1">
                   <input
-                    type="email"
-                    id="email-address"
-                    name="email-address"
-                    autoComplete="email"
+                    type="text"
+                    ref={phoneNumberInputRef}
+                    value={phoneNumberInputRef.current.value}
+                    name="phone"
+                    id="phone"
+                    autoComplete="tel"
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -37,54 +82,21 @@ const Checkout = () => {
               </h2>
 
               <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                <div>
-                  <label
-                    for="first-name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    First name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="first-name"
-                      name="first-name"
-                      autoComplete="given-name"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    for="last-name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Last name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="last-name"
-                      name="last-name"
-                      autoComplete="family-name"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
                 <div className="sm:col-span-2">
                   <label
-                    for="company"
+                    for="address"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Company
+                    Name
                   </label>
                   <div className="mt-1">
                     <input
                       type="text"
-                      name="company"
-                      id="company"
+                      name="name"
+                      ref={nameInputRef}
+                      value={nameInputRef.current.value}
+                      id="name"
+                      autoComplete="street-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -101,25 +113,10 @@ const Checkout = () => {
                     <input
                       type="text"
                       name="address"
+                      ref={addressInputRef}
+                      value={addressInputRef.current.value}
                       id="address"
                       autoComplete="street-address"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label
-                    for="apartment"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Apartment, suite, etc.
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="apartment"
-                      id="apartment"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -135,6 +132,8 @@ const Checkout = () => {
                   <div className="mt-1">
                     <input
                       type="text"
+                      ref={cityInputRef}
+                      value={cityInputRef.current.value}
                       name="city"
                       id="city"
                       autoComplete="address-level2"
@@ -152,8 +151,10 @@ const Checkout = () => {
                   </label>
                   <div className="mt-1">
                     <select
+                      value={countryInputRef.current.value}
                       id="country"
                       name="country"
+                      ref={countryInputRef}
                       autoComplete="country-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
@@ -166,24 +167,6 @@ const Checkout = () => {
 
                 <div>
                   <label
-                    for="region"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    State / Province
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="region"
-                      id="region"
-                      autoComplete="address-level1"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
                     for="postal-code"
                     className="block text-sm font-medium text-gray-700"
                   >
@@ -191,28 +174,12 @@ const Checkout = () => {
                   </label>
                   <div className="mt-1">
                     <input
+                      value={postalCodeInputRef.current.value}
+                      ref={postalCodeInputRef}
                       type="text"
                       name="postal-code"
                       id="postal-code"
                       autoComplete="postal-code"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label
-                    for="phone"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Phone
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="phone"
-                      id="phone"
-                      autoComplete="tel"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
@@ -468,97 +435,109 @@ const Checkout = () => {
             <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
               <h3 className="sr-only">Items in your cart</h3>
               <ul role="list" className="divide-y divide-gray-200">
-                <li className="flex py-6 px-4 sm:px-6">
-                  <div className="flex-shrink-0">
-                    <img
-                      src="https://tailwindui.com/img/ecommerce-images/checkout-page-02-product-01.jpg"
-                      alt="Front of men&#039;s Basic Tee in black."
-                      className="w-20 rounded-md"
-                    />
-                  </div>
+                {cartItems.length > 0 &&
+                  cartItems.map((item) => {
+                    return (
+                      <li className="flex py-6 px-4 sm:px-6">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={item.image}
+                            alt="Front of men&#039;s Basic Tee in black."
+                            className="w-20 rounded-md"
+                          />
+                        </div>
 
-                  <div className="ml-6 flex flex-1 flex-col">
-                    <div className="flex">
-                      <div className="min-w-0 flex-1">
-                        <h4 className="text-sm">
-                          <a
-                            href="#"
-                            className="font-medium text-gray-700 hover:text-gray-800"
-                          >
-                            Basic Tee
-                          </a>
-                        </h4>
-                        <p className="mt-1 text-sm text-gray-500">Black</p>
-                        <p className="mt-1 text-sm text-gray-500">Large</p>
-                      </div>
+                        <div className="ml-6 flex flex-1 flex-col">
+                          <div className="flex">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="text-sm">
+                                <a
+                                  href="#"
+                                  className="font-medium text-gray-700 hover:text-gray-800"
+                                >
+                                  {item.name}
+                                </a>
+                              </h4>
+                              <p className="mt-1 text-sm text-gray-500">
+                                Black
+                              </p>
+                              <p className="mt-1 text-sm text-gray-500">
+                                Large
+                              </p>
+                            </div>
 
-                      <div className="ml-4 flow-root flex-shrink-0">
-                        <button
-                          type="button"
-                          className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
-                        >
-                          <span className="sr-only">Remove</span>
-                          <svg
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
+                            <div className="ml-4 flow-root flex-shrink-0">
+                              <button
+                                onClick={() => removeCartItem(item._id)}
+                                type="button"
+                                className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                              >
+                                <span className="sr-only">Remove</span>
+                                <svg
+                                  className="h-5 w-5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
 
-                    <div className="flex flex-1 items-end justify-between pt-2">
-                      <p className="mt-1 text-sm font-medium text-gray-900">
-                        $32.00
-                      </p>
+                          <div className="flex flex-1 items-end justify-between pt-2">
+                            <p className="mt-1 text-sm font-medium text-gray-900">
+                              $32.00
+                            </p>
 
-                      <div className="ml-4">
-                        <label htmlFor="quantity" className="sr-only">
-                          Quantity
-                        </label>
-                        <select
-                          id="quantity"
-                          name="quantity"
-                          className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                        >
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                            <div className="ml-4">
+                              <label htmlFor="quantity" className="sr-only">
+                                Quantity
+                              </label>
+                              <select
+                                id="quantity"
+                                name="quantity"
+                                className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                              >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
               </ul>
               <dl className="space-y-6 border-t border-gray-200 py-6 px-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm">Subtotal</dt>
-                  <dd className="text-sm font-medium text-gray-900">$64.00</dd>
+                  <dd className="text-sm font-medium text-gray-900">
+                    $ {totalItemsAmount}
+                  </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-sm">Shipping</dt>
-                  <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                  <dd className="text-sm font-medium text-gray-900">$ 5.00</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-sm">Taxes</dt>
-                  <dd className="text-sm font-medium text-gray-900">$5.52</dd>
+                  <dd className="text-sm font-medium text-gray-900">$ 8.52</dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                   <dt className="text-base font-medium">Total</dt>
                   <dd className="text-base font-medium text-gray-900">
-                    $75.52
+                    $ {totalCartItemsAmount}
                   </dd>
                 </div>
               </dl>

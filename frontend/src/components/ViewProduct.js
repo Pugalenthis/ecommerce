@@ -1,10 +1,9 @@
 import React, { Fragment, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getProduct } from "../actions/product-action";
 import Spinner from "./Spinner";
-
-import { addItemToCartAction } from "../actions/cart";
+import { addItemToCart } from "../slices/cartSlice";
 
 const ViewProduct = () => {
   const { id } = useParams();
@@ -20,9 +19,7 @@ const ViewProduct = () => {
   const { cartItems } = useSelector((state) => state.cart);
 
   const addItemtoCartHandler = () => {
-    dispatch(
-      addItemToCartAction({ ...product, qty: +qtyInputRef.current.value })
-    );
+    dispatch(addItemToCart({ ...product, qty: +qtyInputRef.current.value }));
   };
 
   const onSubmitHandler = (e) => {
@@ -50,7 +47,9 @@ const ViewProduct = () => {
                     <h1 className="text-xl font-medium text-gray-900">
                       {product.name}
                     </h1>
-                    <p className="text-xl font-medium text-gray-900">$35</p>
+                    <p className="text-xl font-medium text-gray-900">
+                      ${product.price}
+                    </p>
                   </div>
                   <div className="mt-4">
                     <h2 className="sr-only">Reviews</h2>
@@ -94,17 +93,17 @@ const ViewProduct = () => {
                   <h2 className="sr-only">Images</h2>
                   <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
                     <img
-                      src="https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg"
+                      src={`${product.image}`}
                       alt="Back of women&#039;s Basic Tee in black."
                       className="lg:col-span-2 lg:row-span-2 rounded-lg"
                     />
                     <img
-                      src="https://tailwindui.com/img/ecommerce-images/product-page-01-product-shot-01.jpg"
+                      src={`${product.image}`}
                       alt="Side profile of women&#039;s Basic Tee in black."
                       className="hidden lg:block rounded-lg"
                     />
                     <img
-                      src="https://tailwindui.com/img/ecommerce-images/product-page-01-product-shot-02.jpg"
+                      src={`${product.image}`}
                       alt="Front of women&#039;s Basic Tee in black."
                       className="hidden lg:block rounded-lg"
                     />
@@ -244,13 +243,14 @@ const ViewProduct = () => {
                       <p className="text-red-500">Out of Stock</p>
                     )}
 
-                    <button
+                    <Link
+                      to="/cart"
                       onClick={addItemtoCartHandler}
                       type="submit"
                       className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                       Add to cart
-                    </button>
+                    </Link>
                   </form>
                   <div className="mt-10">
                     <h2 className="text-sm font-medium text-gray-900">
