@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromCart, updateShippingAddress } from "../slices/cartSlice";
 
 const Checkout = () => {
+  const { cartItems, shippingAddress } = useSelector((state) => state.cart);
+  console.log("ship", shippingAddress);
+  console.log("shippin", shippingAddress.name);
+
   const nameInputRef = useRef("");
   const addressInputRef = useRef("");
   const cityInputRef = useRef("");
@@ -10,7 +14,6 @@ const Checkout = () => {
   const postalCodeInputRef = useRef("");
   const phoneNumberInputRef = useRef("");
 
-  const { cartItems } = useSelector((state) => state.cart);
   console.log("cart in cart", cartItems);
 
   const dispatch = useDispatch();
@@ -36,7 +39,7 @@ const Checkout = () => {
       country: countryInputRef.current.value,
       address: addressInputRef.current.value,
       postalCode: postalCodeInputRef.current.value,
-      nameInputRef: nameInputRef.current.value,
+      name: nameInputRef.current.value,
     };
     dispatch(updateShippingAddress(shippingAddress));
   };

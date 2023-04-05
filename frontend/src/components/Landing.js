@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProducts } from "../actions/product-action";
 import styles from "../index.css";
+import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 
 const Landing = () => {
   const dispatch = useDispatch();
+  const [keyword, setKeyword] = useState("");
+  const [pageNumber, setPageNumber] = useState("");
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts(keyword, pageNumber));
   }, []);
 
   const { products, isLoading } = useSelector((state) => state.product);
@@ -58,6 +61,7 @@ const Landing = () => {
             <Spinner />
           )}
         </div>
+        <Pagination />
       </div>
     </div>
   );

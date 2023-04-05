@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { removeItemFromCart } from "../slices/cartSlice";
 
 const Cart = () => {
-  const { cartItems } = useSelector((state) => state.cart);
-  console.log("cartItems", cartItems);
+  let { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
+  console.log("cartItems", cartItems);
   let totalItemsAmount =
     cartItems.length > 0
       ? cartItems.reduce((previous, current) => {

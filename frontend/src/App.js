@@ -22,6 +22,7 @@ import Alert from "./components/Alert";
 import { setAuthToken } from "./utils/setAuthToken";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./actions/auth";
+import { addItemsFromLocalStorage } from "./slices/cartSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function App() {
       setAuthToken(localStorage.token);
       dispatch(loadUser());
     }
+    dispatch(addItemsFromLocalStorage());
   }, []);
 
   return (
