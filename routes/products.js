@@ -63,7 +63,10 @@ router.get("/getallproducts", async (req, res, next) => {
           },
         }
       : {};
+
+    console.log("keyword", { ...keyword });
     const count = await Product.countDocuments({ ...keyword });
+    console.log("count", count);
     const products = await Product.find({ ...keyword })
       .limit(pageSize)
       .skip(pageSize * (page - 1));
