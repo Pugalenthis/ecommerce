@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import userRoute from "./routes/users.js";
 import orderRoute from "./routes/orders.js";
 import productRoute from "./routes/products.js";
+import stripeRoute from "./routes/stripe-route.js";
 import cors from "cors";
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.listen(process.env.PORT, () => {
 app.use("/api/users", userRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/products", productRoute);
+app.use("/api/stripe", stripeRoute);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;

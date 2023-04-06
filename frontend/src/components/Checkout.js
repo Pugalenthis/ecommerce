@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromCart, updateShippingAddress } from "../slices/cartSlice";
+import axios from "axios";
 
 const Checkout = () => {
   const { cartItems, shippingAddress } = useSelector((state) => state.cart);
@@ -31,6 +32,16 @@ const Checkout = () => {
 
   let totalCartItemsAmount = totalItemsAmount + 5 + 8;
 
+  const pay = async (totalAmount) => {
+    const response = await axios.post("http://localhost:4000/api/stripe/pay", {
+      token:
+        "pk_test_51LnbjRSGKZDlJRFCxabNz7y0HqqWSS18IDm8zRfeRkJD8Q843HAL8BJfkLLySg3iRGjd4TtP7o52dZGRuAeli62h00sXd4bBpG",
+      amount: 200,
+    });
+
+    console.log("response in pay", response);
+  };
+
   const createOrder = (e) => {
     e.preventDefault();
     let shippingAddress = {
@@ -42,6 +53,7 @@ const Checkout = () => {
       name: nameInputRef.current.value,
     };
     dispatch(updateShippingAddress(shippingAddress));
+    pay();
   };
 
   return (
