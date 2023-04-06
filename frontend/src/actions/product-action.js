@@ -2,7 +2,7 @@ import axios from "axios";
 import { productsSuccess, productSuccess } from "../slices/productSlice";
 
 export const getProducts =
-  ({ keyword = "", pageNumber = "" }) =>
+  (keyword = "", pageNumber = "") =>
   async (dispatch) => {
     try {
       const response = await axios.get(

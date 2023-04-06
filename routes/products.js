@@ -50,6 +50,8 @@ router.post(
 // @access  public
 
 router.get("/getallproducts", async (req, res, next) => {
+  console.log("pageSize in backend", req.query.pageNumber);
+  console.log("keyword in backend", req.query.keyword);
   try {
     const pageSize = 2;
     const page = Number(req.query.pageNumber) || 1;
@@ -65,9 +67,10 @@ router.get("/getallproducts", async (req, res, next) => {
     const products = await Product.find({ ...keyword })
       .limit(pageSize)
       .skip(pageSize * (page - 1));
+    console.log("products in getall products", products);
     res
       .status(200)
-      .json({ products, page, pageSize: Math.ceil(count / pageSize) });
+      .json({ products, page, pages: Math.ceil(count / pageSize) });
   } catch (error) {
     next(error);
   }

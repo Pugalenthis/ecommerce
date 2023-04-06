@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProducts } from "../actions/product-action";
@@ -9,19 +9,25 @@ import Spinner from "./Spinner";
 const Landing = () => {
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
-  const [pageNumber, setPageNumber] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
 
+  console.log("setpageNumber in landing", pageNumber);
   useEffect(() => {
     dispatch(getProducts(keyword, pageNumber));
-  }, []);
+  }, [keyword, pageNumber]);
 
-  const { products, isLoading } = useSelector((state) => state.product);
+  const { products, isLoading, page, pages } = useSelector(
+    (state) => state.product
+  );
+
+  console.log("pages in landing", pages);
+  console.log("pageNumber in landing", pageNumber);
 
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {!isLoading && products.length > 0 ? (
+          {products.length > 0 &&
             products.map((product) => {
               return (
                 <div key={product._id} className="group relative">
@@ -56,12 +62,14 @@ const Landing = () => {
                   </Link>
                 </div>
               );
-            })
-          ) : (
-            <Spinner />
-          )}
+            })}
+          {!isLoading && products.length == 0 && <h1>NO PRODUCTS FOUND</h1>}
         </div>
-        <Pagination />
+        <Pagination
+          pages={pages}
+          setPageNumber={setPageNumber}
+          pageNumber={pageNumber}
+        />
       </div>
     </div>
   );

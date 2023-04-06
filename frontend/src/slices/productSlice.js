@@ -4,8 +4,8 @@ const initialState = {
   products: [],
   isLoading: true,
   product: null,
-  pageSize: null,
   page: null,
+  pages: null,
 };
 
 export const productSlice = createSlice({
@@ -17,7 +17,7 @@ export const productSlice = createSlice({
         products: action.payload.products,
         isLoading: false,
         product: null,
-        pageSize: action.payload.pageSize,
+        pages: action.payload.pages,
         page: action.payload.page,
       };
       return updatedState;

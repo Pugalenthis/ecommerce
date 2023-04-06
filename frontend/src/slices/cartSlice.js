@@ -29,12 +29,10 @@ export const cartSlice = createSlice({
           ),
         };
       } else {
-        let cartItemsInLocalStorage = JSON.parse(localStorage.getItem("cart"));
-
+        let cartItemsInLocalStorage = localStorage.getItem("cart");
         if (!cartItemsInLocalStorage) {
           cartItemsInLocalStorage = [];
         }
-
         localStorage.setItem(
           "cart",
           JSON.stringify([...cartItemsInLocalStorage, action.payload])
