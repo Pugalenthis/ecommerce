@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromCart, updateShippingAddress } from "../slices/cartSlice";
 import axios from "axios";
+import { createOrderInRazorpayAction } from "../actions/cart";
+import Razorpay from "razorpay";
 
 const Checkout = () => {
   const { cartItems, shippingAddress } = useSelector((state) => state.cart);
@@ -43,6 +45,28 @@ const Checkout = () => {
       name: nameInputRef.current.value,
     };
     dispatch(updateShippingAddress(shippingAddress));
+  };
+
+  const createOrderInRazorpay = (e) => {
+    e.preventDefault();
+    dispatch(createOrderInRazorpayAction(makePayment));
+  };
+
+  const makePayment = (data) => {
+    var options = {
+      key: "rzp_test_gGGSIzWxM9kpYm", // Enter the Key ID generated from the Dashboard
+      amount: data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: data.currency,
+      name: "mernshop",
+      order_id: data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response) {
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature);
+      },
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on();
   };
 
   return (
@@ -548,6 +572,7 @@ const Checkout = () => {
 
               <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                 <button
+                  onClick={createOrderInRazorpay}
                   type="submit"
                   className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                 >

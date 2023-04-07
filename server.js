@@ -7,6 +7,7 @@ import userRoute from "./routes/users.js";
 import orderRoute from "./routes/orders.js";
 import productRoute from "./routes/products.js";
 import cors from "cors";
+import paymentRoute from "./routes/Payment.js";
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.listen(process.env.PORT, () => {
 app.use("/api/users", userRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/products", productRoute);
+app.use("/api/payments", paymentRoute);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
