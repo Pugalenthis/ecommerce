@@ -9,6 +9,7 @@ export const login = (formData) => async (dispatch) => {
       formData
     );
 
+    console.log("response in login action", response.data);
     dispatch(loginSuccess(response.data));
     dispatch(setAlertAction("Login successfully", "green"));
   } catch (error) {

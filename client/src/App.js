@@ -1,4 +1,3 @@
-import "./App.css";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
@@ -23,6 +22,7 @@ import { setAuthToken } from "./utils/setAuthToken";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./actions/auth";
 import { addItemsFromLocalStorage } from "./slices/cartSlice";
+import Payment from "./components/Payment";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +41,7 @@ function App() {
         <Alert />
         <Routes>
           <Route path="/" element={<Landing />} />
+          {/* <Route path="/payment" element={<Payment />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />

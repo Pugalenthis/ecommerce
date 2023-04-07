@@ -1,15 +1,17 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromCart, updateShippingAddress } from "../slices/cartSlice";
 import axios from "axios";
-import { createOrderInRazorpayAction } from "../actions/cart";
-import Razorpay from "razorpay";
+import {
+  createOrderAction,
+  createOrderInRazorpayAction,
+} from "../actions/cart";
+import { Link, useNavigate } from "react-router-dom";
+// import Razorpay from "razorpay";
 
 const Checkout = () => {
   const { cartItems, shippingAddress } = useSelector((state) => state.cart);
-  console.log("ship", shippingAddress);
-  console.log("shippin", shippingAddress.name);
-
+  const navigate = useNavigate();
   const nameInputRef = useRef("");
   const addressInputRef = useRef("");
   const cityInputRef = useRef("");
@@ -23,6 +25,9 @@ const Checkout = () => {
   const removeCartItem = (id) => {
     dispatch(removeItemFromCart(id));
   };
+
+  const { user } = useSelector((state) => state.auth);
+  console.log("user in checkout", user);
 
   let totalItemsAmount =
     cartItems.length > 0
@@ -47,26 +52,67 @@ const Checkout = () => {
     dispatch(updateShippingAddress(shippingAddress));
   };
 
-  const createOrderInRazorpay = (e) => {
-    e.preventDefault();
-    dispatch(createOrderInRazorpayAction(makePayment));
-  };
-
-  const makePayment = (data) => {
-    var options = {
-      key: "rzp_test_gGGSIzWxM9kpYm", // Enter the Key ID generated from the Dashboard
-      amount: data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  const initPayment = (data) => {
+    console.log("entered into initpayment", data);
+    const options = {
+      key: "rzp_test_gGGSIzWxM9kpYm",
+      amount: data.amount,
       currency: data.currency,
       name: "mernshop",
-      order_id: data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      handler: function (response) {
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+      order_id: data.id,
+      handler: async (response) => {
+        try {
+          const verifyUrl = "http://localhost:4000/api/payment/verify";
+          const { data } = await axios.post(verifyUrl, response);
+          navigate("/confirmedorder");
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      theme: {
+        color: "#3399cc",
       },
     };
-    var rzp1 = new Razorpay(options);
-    rzp1.on();
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
+  const handlePayment = async () => {
+    try {
+      const orderUrl = "http://localhost:4000/api/payment/orders";
+      const { data } = await axios.post(orderUrl, {
+        amount: totalCartItemsAmount,
+      });
+      const orderData = {
+        user: user._id,
+        orderItems: cartItems.map((item) => {
+          return {
+            name: item.name,
+            qty: item.qty,
+            image: item.image,
+            product: item._id,
+            price: item.qty * item.price,
+          };
+        }),
+        shippingAddress: {
+          address: shippingAddress.address,
+          city: shippingAddress.city,
+          postalCode: shippingAddress.postalCode,
+          country: shippingAddress.country,
+        },
+        paymentMethod: "razorpay",
+        taxPrice: 50,
+        shippingPrice: 14,
+        totalPrice: totalCartItemsAmount,
+      };
+      dispatch(createOrderAction(data, orderData, initPayment));
+      // console.log("data", data);
+      // console.log("orderData", orderData);
+      // initPayment(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -94,7 +140,6 @@ const Checkout = () => {
                   <input
                     type="text"
                     ref={phoneNumberInputRef}
-                    value={phoneNumberInputRef.current.value}
                     name="phone"
                     id="phone"
                     autoComplete="tel"
@@ -122,7 +167,6 @@ const Checkout = () => {
                       type="text"
                       name="name"
                       ref={nameInputRef}
-                      value={nameInputRef.current.value}
                       id="name"
                       autoComplete="street-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -142,7 +186,6 @@ const Checkout = () => {
                       type="text"
                       name="address"
                       ref={addressInputRef}
-                      value={addressInputRef.current.value}
                       id="address"
                       autoComplete="street-address"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -161,7 +204,6 @@ const Checkout = () => {
                     <input
                       type="text"
                       ref={cityInputRef}
-                      value={cityInputRef.current.value}
                       name="city"
                       id="city"
                       autoComplete="address-level2"
@@ -179,7 +221,6 @@ const Checkout = () => {
                   </label>
                   <div className="mt-1">
                     <select
-                      value={countryInputRef.current.value}
                       id="country"
                       name="country"
                       ref={countryInputRef}
@@ -202,7 +243,6 @@ const Checkout = () => {
                   </label>
                   <div className="mt-1">
                     <input
-                      value={postalCodeInputRef.current.value}
                       ref={postalCodeInputRef}
                       type="text"
                       name="postal-code"
@@ -572,7 +612,8 @@ const Checkout = () => {
 
               <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                 <button
-                  onClick={createOrderInRazorpay}
+                  onClick={handlePayment}
+                  to="/payment"
                   type="submit"
                   className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                 >

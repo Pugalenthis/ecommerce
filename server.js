@@ -25,7 +25,7 @@ app.listen(process.env.PORT, () => {
 app.use("/api/users", userRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/products", productRoute);
-app.use("/api/payments", paymentRoute);
+app.use("/api/payment", paymentRoute);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;

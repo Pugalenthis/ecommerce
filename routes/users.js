@@ -122,7 +122,7 @@ router.post(
           })
           .status(200)
           .json({
-            token,
+            token: token,
             name: user.name,
             _id: user._id,
             email: user.email,

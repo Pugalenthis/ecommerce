@@ -7,7 +7,7 @@ import {
   verifyAdmin,
 } from "../middlewares/authMiddleware.js";
 
-router.post("/", verifyToken, verifyAdmin, async (req, res, next) => {
+router.post("/", verifyToken, verifyUser, async (req, res, next) => {
   try {
     const order = new Order({
       user: req.user.id,
