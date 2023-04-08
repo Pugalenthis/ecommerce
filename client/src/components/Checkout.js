@@ -4,9 +4,10 @@ import { removeItemFromCart, updateShippingAddress } from "../slices/cartSlice";
 import axios from "axios";
 import {
   createOrderAction,
-  createOrderInRazorpayAction,
-} from "../actions/cart";
+  updatePaymentStatus,
+} from "../actions/order-action.js";
 import { Link, useNavigate } from "react-router-dom";
+import { addOrder } from "../slices/orderSlice";
 // import Razorpay from "razorpay";
 
 const Checkout = () => {
@@ -63,9 +64,19 @@ const Checkout = () => {
       handler: async (response) => {
         try {
           const verifyUrl = "http://localhost:4000/api/payment/verify";
-          const { data } = await axios.post(verifyUrl, response);
-          navigate("/confirmedorder");
-          console.log(data);
+          let paidDetails = response;
+          const updateOrderData = {
+            ...paidDetails,
+            isPaid: true,
+            paidAt: new Date().toISOString(),
+          };
+          console.log("updateOrderData", updateOrderData);
+          console.log("data", data);
+          const { data: responseData } = await axios.post(verifyUrl, response);
+          dispatch(updatePaymentStatus(updateOrderData));
+
+          console.log("data after payment", responseData);
+          // navigate("/confirmedorder");
         } catch (error) {
           console.log(error);
         }
@@ -84,6 +95,7 @@ const Checkout = () => {
       const { data } = await axios.post(orderUrl, {
         amount: totalCartItemsAmount,
       });
+      console.log("response in order creation", data);
       const orderData = {
         user: user._id,
         orderItems: cartItems.map((item) => {
@@ -101,11 +113,13 @@ const Checkout = () => {
           postalCode: shippingAddress.postalCode,
           country: shippingAddress.country,
         },
+        razporpayOrderId: data.id,
         paymentMethod: "razorpay",
         taxPrice: 50,
         shippingPrice: 14,
         totalPrice: totalCartItemsAmount,
       };
+
       dispatch(createOrderAction(data, orderData, initPayment));
       // console.log("data", data);
       // console.log("orderData", orderData);

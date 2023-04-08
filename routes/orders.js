@@ -39,15 +39,23 @@ router.get("/:id", verifyToken, verifyUser, async (req, res, next) => {
 });
 
 router.put("/:order_id", verifyToken, verifyAdmin, async (req, res, next) => {
+  console.log("req.body in put", req.body);
   try {
     // const product = await Product.findOne({ _id: req.params.post_id });
     const updatedOrder = await Order.findOneAndUpdate(
-      { _id: req.params.order_id },
+      { razporpayOrderId: req.params.order_id },
       {
-        $set: req.body,
+        $set: {
+          isPaid: req.body.isPaid,
+          paidAt: req.body.paidAt,
+          "paymentResult.razorpay_payment_id": req.body.razorpay_payment_id,
+          "paymentResult.razorpay_signature": req.body.razorpay_signature,
+        },
       },
       { new: true }
     );
+
+    console.log("updated order in routes", updatedOrder);
     res.status(200).json(updatedOrder);
   } catch (error) {
     next(error);

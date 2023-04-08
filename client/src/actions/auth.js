@@ -40,10 +40,7 @@ export const register = (formData) => async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
   try {
     const response = await axios.get("http://localhost:4000/api/users/user");
-
-    dispatch(
-      loginSuccess({ token: localStorage.getItem("token"), ...response.data })
-    );
+    dispatch(loginSuccess(response.data));
   } catch (error) {
     dispatch(logOut());
   }

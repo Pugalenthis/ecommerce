@@ -146,7 +146,7 @@ router.get("/", verifyToken, verifyAdmin, async (req, res, next) => {
 
 router.get("/user", verifyToken, async (req, res, next) => {
   try {
-    const user = await User.find({
+    const user = await User.findOne({
       _id: req.query.user_id || req.user.id,
     }).select("-password");
     console.log("user", user);
