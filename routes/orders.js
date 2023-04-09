@@ -20,7 +20,7 @@ router.post("/", verifyToken, verifyUser, async (req, res, next) => {
   }
 });
 
-router.get("/", verifyToken, verifyAdmin, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const orders = await Order.find({});
     res.status(200).json(orders);

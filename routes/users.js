@@ -11,8 +11,6 @@ import {
   verifyUser,
   verifyAdmin,
 } from "../middlewares/authMiddleware.js";
-// import nodemailer from "nodemailer";
-// import Handlebars from "handlebars";
 import fs from "fs";
 
 // @route   POST api/user/register
@@ -135,7 +133,7 @@ router.post(
   }
 );
 
-router.get("/", verifyToken, verifyAdmin, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);
@@ -146,6 +144,15 @@ router.get("/", verifyToken, verifyAdmin, async (req, res, next) => {
 
 router.get("/user", verifyToken, async (req, res, next) => {
   try {
+    console.log(
+      "req.user.id",
+      req.user.id,
+      "req.query.user_id",
+      req.query.user_id
+    );
+    console.log("id: req.query.user_id || req.user.id,", {
+      _id: req.query.user_id || req.user.id,
+    });
     const user = await User.findOne({
       _id: req.query.user_id || req.user.id,
     }).select("-password");

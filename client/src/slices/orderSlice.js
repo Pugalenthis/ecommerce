@@ -10,7 +10,6 @@ export const orderSlice = createSlice({
       state.push(action.payload);
     },
     updateOrder: (state, action) => {
-      console.log("updateOrder data in slice", action.payload);
       let ordersBeforePayment = current(state);
       return ordersBeforePayment.map((order) => {
         return order.razporpayOrderId === action.payload.razporpayOrderId

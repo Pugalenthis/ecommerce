@@ -80,11 +80,6 @@ export const cartSlice = createSlice({
           ? shippingAddressInLocalStorage
           : JSON.parse(shippingAddressInLocalStorage);
 
-      console.log("in updating", {
-        ...state,
-        cartItems: cartItemsInLocalStorage,
-        shippingAddress: shippingAddressInLocalStorage,
-      });
       return {
         ...state,
         cartItems: cartItemsInLocalStorage,
