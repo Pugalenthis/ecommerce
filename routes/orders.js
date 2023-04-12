@@ -29,7 +29,17 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/:order_id", async (req, res, next) => {
+  try {
+    const order = await Order.findOne({ _id: req.params.order_id });
+    res.status(200).json(order);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/:id", verifyToken, verifyUser, async (req, res, next) => {
+  console.log("orders in", req.params.id);
   try {
     const orders = await Order.find({ user: req.user.id });
     res.status(200).json(orders);

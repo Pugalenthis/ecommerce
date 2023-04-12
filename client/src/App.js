@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import { loadUser } from "./actions/auth";
 import { addItemsFromLocalStorage } from "./slices/cartSlice";
 import Payment from "./components/Payment";
+import Myorders from "./components/myOrders";
 
 function App() {
   const dispatch = useDispatch();
@@ -48,7 +49,11 @@ function App() {
           <Route path="/product/:id" element={<ViewProduct />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<OrdersList />} />
-          <Route path="/confirmedorder" element={<ConfirmedOrder />} />
+          <Route
+            path="/confirmedorder/:order_id"
+            element={<ConfirmedOrder />}
+          />
+          <Route path="myOrders" element={<Myorders />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/users" element={<UsersList />} />
           <Route path="/products" element={<ProductsList />} />

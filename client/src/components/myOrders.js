@@ -1,64 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../actions/orders-action";
+import useFetch from "../hooks/useFetchHooks";
 import Spinner from "./Spinner";
 
-const OrdersList = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getOrders());
-  }, []);
-
-  const { isLoading, orders } = useSelector((state) => state.orders);
-
-  console.log("products", orders);
-
-  let content = [];
-
-  if (isLoading) {
-    content = <Spinner />;
-  }
-
-  if (!orders && !isLoading) {
-    content = <h1>NO ORDERS</h1>;
-  }
-
-  if (orders) {
-    orders.map((order) => {
-      console.log("user", order);
-      content.push(
-        <tr>
-          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-            {order._id}
-          </td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            {order.user}
-          </td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            ${order.createdAt}
-          </td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            {order.totalPrice}
-          </td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            {order.isPaid ? "Paid" : "unPaid"}
-          </td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            {order.isDelivered ? "Delivered" : "Not Delivered"}
-          </td>
-          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-              Edit<span className="sr-only">, </span>
-            </a>
-            <a href="#" className="text-red-600 hover:text-red-900 ml-2">
-              Delete<span className="sr-only">, </span>
-            </a>
-          </td>
-        </tr>
-      );
-    });
-  }
+const Myorders = () => {
+  const auth = useSelector((state) => state.auth);
+  console.log("auth in myOrders", auth.user._id);
 
   return (
     <div className="mx-auto  max-w-7xl items-center justify-between gap-x-6 p-6lg:px-8 my-10">
@@ -129,7 +77,7 @@ const OrdersList = () => {
                   ></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">{content}</tbody>
+              <tbody className="divide-y divide-gray-200"></tbody>
             </table>
           </div>
         </div>
@@ -138,4 +86,4 @@ const OrdersList = () => {
   );
 };
 
-export default OrdersList;
+export default Myorders;

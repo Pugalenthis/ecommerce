@@ -73,10 +73,13 @@ const Checkout = () => {
           console.log("updateOrderData", updateOrderData);
           console.log("data", data);
           const { data: responseData } = await axios.post(verifyUrl, response);
-          dispatch(updatePaymentStatus(updateOrderData));
+          const sendOrderId = (orderId) => {
+            console.log("entered into sendOrderId", orderId);
+            navigate(`/confirmedorder/${orderId}`);
+          };
+          dispatch(updatePaymentStatus(updateOrderData, sendOrderId));
 
           console.log("data after payment", responseData);
-          // navigate("/confirmedorder");
         } catch (error) {
           console.log(error);
         }
