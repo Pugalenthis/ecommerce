@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export const productsSlice = createSlice({
-  name: "users",
+  name: "admin",
   initialState,
   reducers: {
     productsLoadingSuccess: (state, action) => {

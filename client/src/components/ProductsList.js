@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../actions/product-action";
+import { getProducts } from "../actions/admin-action";
 import Spinner from "./Spinner";
 
 const ProductsList = () => {
@@ -9,7 +9,7 @@ const ProductsList = () => {
     dispatch(getProducts());
   }, []);
 
-  const { isLoading, products } = useSelector((state) => state.product);
+  const { isLoading, products } = useSelector((state) => state.admin);
 
   console.log("products in productList", products);
 

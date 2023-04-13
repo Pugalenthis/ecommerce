@@ -49,6 +49,24 @@ router.post(
 // @desc    get all products
 // @access  public
 
+router.get(
+  "/admin/getallproducts",
+  verifyToken,
+  verifyAdmin,
+  async (req, res, next) => {
+    try {
+      const products = await Product.find();
+      res.status(200).json(products);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// @route   GET /api/products/getallproducts
+// @desc    get all products
+// @access  public
+
 router.get("/getallproducts", async (req, res, next) => {
   console.log("pageSize in backend", req.query.pageNumber);
   console.log("keyword in backend", req.query.keyword);
@@ -65,6 +83,7 @@ router.get("/getallproducts", async (req, res, next) => {
       : {};
 
     console.log("keyword", { ...keyword });
+    console.log("pageSize", pageSize);
     const count = await Product.countDocuments({ ...keyword });
     console.log("count", count);
     const products = await Product.find({ ...keyword })
