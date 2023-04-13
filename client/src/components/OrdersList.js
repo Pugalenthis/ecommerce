@@ -10,9 +10,9 @@ const OrdersList = () => {
     dispatch(getOrders());
   }, []);
 
-  const { isLoading, orders } = useSelector((state) => state.orders);
+  const { isLoading, allOrders } = useSelector((state) => state.orders);
 
-  console.log("products", orders);
+  console.log("products", allOrders);
 
   let content = [];
 
@@ -20,12 +20,12 @@ const OrdersList = () => {
     content = <Spinner />;
   }
 
-  if (!orders && !isLoading) {
+  if (!allOrders && !isLoading) {
     content = <h1>NO ORDERS</h1>;
   }
 
-  if (orders) {
-    orders.map((order) => {
+  if (allOrders) {
+    allOrders.map((order) => {
       console.log("user", order);
       content.push(
         <tr>

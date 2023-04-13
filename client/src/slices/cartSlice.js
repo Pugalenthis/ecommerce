@@ -33,6 +33,7 @@ export const cartSlice = createSlice({
         if (!cartItemsInLocalStorage) {
           cartItemsInLocalStorage = [];
         }
+
         localStorage.setItem(
           "cart",
           JSON.stringify([...cartItemsInLocalStorage, action.payload])

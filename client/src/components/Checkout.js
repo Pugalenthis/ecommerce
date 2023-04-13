@@ -42,15 +42,6 @@ const Checkout = () => {
 
   const createOrder = (e) => {
     e.preventDefault();
-    let shippingAddress = {
-      phoneNumber: phoneNumberInputRef.current.value,
-      city: cityInputRef.current.value,
-      country: countryInputRef.current.value,
-      address: addressInputRef.current.value,
-      postalCode: postalCodeInputRef.current.value,
-      name: nameInputRef.current.value,
-    };
-    dispatch(updateShippingAddress(shippingAddress));
   };
 
   const initPayment = (data) => {
@@ -77,7 +68,7 @@ const Checkout = () => {
             console.log("entered into sendOrderId", orderId);
             navigate(`/confirmedorder/${orderId}`);
           };
-          dispatch(updatePaymentStatus(updateOrderData, sendOrderId));
+          dispatch(updatePaymentStatus(updateOrderData, user._id, sendOrderId));
 
           console.log("data after payment", responseData);
         } catch (error) {
@@ -126,10 +117,26 @@ const Checkout = () => {
       dispatch(createOrderAction(data, orderData, initPayment));
       // console.log("data", data);
       // console.log("orderData", orderData);
-      // initPayment(data);
+      initPayment(data);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const updateShippingAddressHandler = () => {
+    let shippingAddress = {
+      phoneNumber: phoneNumberInputRef.current.value,
+      city: cityInputRef.current.value,
+      country: countryInputRef.current.value,
+      address: addressInputRef.current.value,
+      postalCode: postalCodeInputRef.current.value,
+      name: nameInputRef.current.value,
+    };
+    console.log(
+      "shipping address in update shipping address handler",
+      shippingAddress
+    );
+    dispatch(updateShippingAddress(shippingAddress));
   };
 
   return (
@@ -268,6 +275,16 @@ const Checkout = () => {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
+                </div>
+
+                <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                  <button
+                    onClick={updateShippingAddressHandler}
+                    to="/payment"
+                    className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Save Shipping Address
+                  </button>
                 </div>
               </div>
             </div>

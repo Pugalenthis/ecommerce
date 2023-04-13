@@ -13,7 +13,7 @@ export const createOrderAction =
         axios.defaults.headers.common
       );
       const response = await axios.post(
-        "http://localhost:4000/api/orders/",
+        `http://localhost:4000/api/orders/${customizedOrderData.user}`,
         customizedOrderData
       );
       dispatch(addOrder(response.data));
@@ -24,7 +24,7 @@ export const createOrderAction =
   };
 
 export const updatePaymentStatus =
-  (updateOrderData, sendOrderId) => async (dispatch) => {
+  (updateOrderData, user_id, sendOrderId) => async (dispatch) => {
     console.log("updateOrderData", updateOrderData);
     try {
       console.log(
@@ -32,7 +32,7 @@ export const updatePaymentStatus =
         axios.defaults.headers.common
       );
       const response = await axios.put(
-        `http://localhost:4000/api/orders/${updateOrderData.razorpay_order_id}`,
+        `http://localhost:4000/api/orders/${updateOrderData.razorpay_order_id}/${user_id}`,
         updateOrderData
       );
       console.log("after upating payment data in api", response.data);

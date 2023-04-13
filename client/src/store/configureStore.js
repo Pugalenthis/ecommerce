@@ -7,6 +7,7 @@ import orderSlice from "../slices/orderSlice.js";
 import usersSlice from "../slices/usersSlice.js";
 import productsSlice from "../slices/productsSlice.js";
 import ordersSlice from "../slices/ordersSlice.js";
+import { setAuthToken } from "../utils/setAuthToken.js";
 
 export const store = configureStore({
   reducer: {
@@ -19,4 +20,19 @@ export const store = configureStore({
     products: productsSlice,
     orders: ordersSlice,
   },
+});
+
+let currentState = store.getState();
+
+store.subscribe(() => {
+  let previousState = currentState;
+  currentState = store.getState();
+  if (previousState.auth.token !== currentState.auth.token) {
+    console.log(
+      "token changed",
+      previousState.auth.token,
+      currentState.auth.token
+    );
+    setAuthToken(currentState.auth.token);
+  }
 });

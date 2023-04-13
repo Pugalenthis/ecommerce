@@ -19,6 +19,10 @@ const ViewProduct = () => {
   const { cartItems } = useSelector((state) => state.cart);
 
   const addItemtoCartHandler = () => {
+    console.log("add item to cart Handler", {
+      ...product,
+      qty: +qtyInputRef.current.value,
+    });
     dispatch(addItemToCart({ ...product, qty: +qtyInputRef.current.value }));
   };
 

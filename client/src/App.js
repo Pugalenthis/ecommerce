@@ -32,7 +32,6 @@ function App() {
       setAuthToken(localStorage.token);
       dispatch(loadUser());
     }
-    dispatch(addItemsFromLocalStorage());
   }, []);
 
   return (

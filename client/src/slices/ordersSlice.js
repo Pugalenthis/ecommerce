@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  orders: null,
+  allOrders: null,
   isLoading: true,
 };
 
@@ -11,7 +11,7 @@ export const ordersSlice = createSlice({
   reducers: {
     ordersLoadingSuccess: (state, action) => {
       return {
-        orders: action.payload,
+        allOrders: action.payload,
         isLoading: false,
       };
     },
