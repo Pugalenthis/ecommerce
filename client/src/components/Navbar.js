@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { setAlertAction } from "../actions/alert";
 import { getProducts } from "../actions/product-action";
 import { logOut } from "../slices/authSlice";
+import Myorders from "./myOrders";
 
 const Navbar = () => {
   const { isAuthenticated, isLoading, user } = useSelector(
@@ -18,6 +19,8 @@ const Navbar = () => {
   };
 
   const { products, page, pages } = useSelector((state) => state.product);
+
+  const { cartItems } = useSelector((state) => state.cart);
 
   const searchSubmitHandler = (e) => {
     e.preventDefault();
@@ -86,12 +89,14 @@ const Navbar = () => {
         </button>
       </form>
 
-      <div className="flex flex-1 items-center justify-end gap-x-6">
+      <div className="flex flex-1 items-center justify-end gap-x-8">
         <Link
           to="/cart"
-          className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 "
+          className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 relative"
         >
-          Cart
+          <i class="fa-solid fa-cart-shopping ">
+            <span className="absolute top-0 ml-1 ">{cartItems.length}</span>
+          </i>
         </Link>
         <Link
           to="/login"
@@ -165,9 +170,11 @@ const Navbar = () => {
       <div className="flex flex-1 items-center justify-end gap-x-6">
         <Link
           to="/cart"
-          className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 "
+          className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 relative"
         >
-          Cart
+          <i class="fa-solid fa-cart-shopping ">
+            <span className="absolute top-0 ml-1 ">{cartItems.length}</span>
+          </i>
         </Link>
         <Link
           to="/myOrders"

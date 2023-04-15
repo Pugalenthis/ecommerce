@@ -36,11 +36,16 @@ const UsersList = () => {
             {user.email}
           </td>
           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            {user.isAdmin ? "Yes" : "No"}
+            {user.isAdmin ? (
+              <i class="fa-solid fa-check text-green-600 text-xl"></i>
+            ) : (
+              <i class="fa-solid fa-xmark text-red-600 text-xl"></i>
+            )}
           </td>
           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
             <a href="#" className="text-indigo-600 hover:text-indigo-900">
-              Edit<span className="sr-only">, </span>
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span className="sr-only">, </span>
             </a>
             <a href="#" className="text-red-600 hover:text-red-900 ml-2">
               Delete<span className="sr-only">, </span>
@@ -52,7 +57,7 @@ const UsersList = () => {
   }
 
   return (
-    <div className="mx-auto  max-w-7xl items-center justify-between gap-x-6 p-6lg:px-8 my-10">
+    <div className="mx-auto  max-w-7xl items-center justify-between gap-x-6 p-6lg:px-8 my-10 min-h-screen">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -104,7 +109,9 @@ const UsersList = () => {
                     ADMIN
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </span>
                   </th>
                 </tr>
               </thead>

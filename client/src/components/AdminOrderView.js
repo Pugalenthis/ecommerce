@@ -6,7 +6,7 @@ import { getOrderById } from "../actions/order-action";
 import useFetch from "../hooks/useFetchHooks";
 import Spinner from "./Spinner";
 
-const ConfirmedOrder = () => {
+const AdminOrderView = () => {
   const { order_id } = useParams();
 
   console.log("order_id", order_id);
@@ -18,12 +18,12 @@ const ConfirmedOrder = () => {
   console.log("loading", loading);
   console.log("error", error);
 
-  console.log("data in ConfirmedOrder", data);
+  console.log("data in AdminOrderView", data);
   return (
     <Fragment>
       {loading && <Spinner />}
       {!loading && data && (
-        <div className="bg-gray-50">
+        <div className="bg-gray-50 min-h-screen">
           <div className="mx-auto max-w-2xl pt-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="space-y-2 px-4 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 sm:px-0">
               <div className="flex sm:items-baseline sm:space-x-4">
@@ -210,4 +210,4 @@ const ConfirmedOrder = () => {
   );
 };
 
-export default ConfirmedOrder;
+export default AdminOrderView;

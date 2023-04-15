@@ -8,6 +8,7 @@ import usersSlice from "../slices/usersSlice.js";
 import adminSlice from "../slices/adminSlice.js";
 import ordersSlice from "../slices/ordersSlice.js";
 import { setAuthToken } from "../utils/setAuthToken.js";
+import { useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
@@ -25,14 +26,16 @@ export const store = configureStore({
 let currentState = store.getState();
 
 store.subscribe(() => {
+  // keep track of the previous and current state to compare changes
   let previousState = currentState;
   currentState = store.getState();
+
+  // if the token changes set the value in localStorage and axios headers
   if (previousState.auth.token !== currentState.auth.token) {
-    console.log(
-      "token changed",
-      previousState.auth.token,
-      currentState.auth.token
-    );
+    console.log("previousState.auth.token", previousState.auth.token);
+    console.log("currentState", currentState);
+    console.log("currentstate.auth.token", currentState.auth.token);
+    localStorage.setItem("token", currentState.auth.token);
     setAuthToken(currentState.auth.token);
   }
 });

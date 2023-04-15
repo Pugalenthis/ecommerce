@@ -57,7 +57,7 @@ const ProductsList = () => {
   }
 
   return (
-    <div className="mx-auto  max-w-7xl items-center justify-between gap-x-6 p-6lg:px-8 my-10">
+    <div className="mx-auto  max-w-7xl items-center justify-between gap-x-6 p-6lg:px-8 my-10 min-h-screen">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -114,7 +114,9 @@ const ProductsList = () => {
                     BRAND
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </span>
                     <span className="sr-only ml-2 text-red-700">Delete</span>
                   </th>
                 </tr>

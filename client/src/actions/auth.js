@@ -1,6 +1,7 @@
 import { loginSuccess, logOut } from "../slices/authSlice";
 import axios from "axios";
 import { setAlertAction } from "./alert";
+import { setAuthToken } from "../utils/setAuthToken";
 
 export const login = (formData) => async (dispatch) => {
   try {
@@ -26,8 +27,9 @@ export const register = (formData) => async (dispatch) => {
       "http://localhost:4000/api/users/register",
       formData
     );
-
     dispatch(loginSuccess(response.data));
+    console.log("response.data in register", response.data);
+
     dispatch(setAlertAction("Login successfully", "green"));
   } catch (error) {
     const errors = error.response.data.message.errors;
@@ -40,8 +42,9 @@ export const register = (formData) => async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
   try {
     const response = await axios.get("http://localhost:4000/api/users/user");
+    console.log("response in loadUser", response.data);
     dispatch(loginSuccess(response.data));
   } catch (error) {
-    dispatch(logOut());
+    console.log("error in loadUser");
   }
 };

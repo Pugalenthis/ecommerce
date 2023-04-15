@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getOrders } from "../actions/orders-action";
 import Spinner from "./Spinner";
 
@@ -42,18 +43,23 @@ const OrdersList = () => {
             {order.totalPrice}
           </td>
           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-            {order.isPaid ? "Paid" : "unPaid"}
+            {order.isPaid ? (
+              <i class="fa-solid fa-check text-green-600 text-xl"></i>
+            ) : (
+              <i class="fa-solid fa-xmark text-red-600 text-xl"></i>
+            )}
           </td>
           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
             {order.isDelivered ? "Delivered" : "Not Delivered"}
           </td>
           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-              Edit<span className="sr-only">, </span>
-            </a>
-            <a href="#" className="text-red-600 hover:text-red-900 ml-2">
-              Delete<span className="sr-only">, </span>
-            </a>
+            <Link
+              to={`/order/${order._id}`}
+              type="button"
+              className="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Details
+            </Link>
           </td>
         </tr>
       );
@@ -71,14 +77,6 @@ const OrdersList = () => {
             A list of all the orders in your account including their ID, total,
             paid and delivered.
           </p>
-        </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add product
-          </button>
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -121,7 +119,7 @@ const OrdersList = () => {
                     scope="col"
                     className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
                   >
-                    DELIVERED
+                    DELIVERY STATUS
                   </th>
                   <th
                     scope="col"

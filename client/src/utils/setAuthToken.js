@@ -1,20 +1,16 @@
 import axios from "axios";
 
 export const setAuthToken = (token) => {
-  console.log("set auth token is called", token);
+  console.log("token in setauthtoken", token);
   if (token) {
-    axios.defaults.headers.common["access_token"] = token;
+    console.log("entered into if");
     localStorage.setItem("token", token);
-    console.log(
-      "entered into if",
-      axios.defaults.headers.common["access_token"]
-    );
+    axios.defaults.headers.common["x-auth-token"] = token;
+    axios.defaults.headers.common["name"] = "pugalenthi";
+    console.log("after setting headers", axios.defaults.headers.common);
   } else {
-    delete axios.defaults.headers.common["access_token"];
+    console.log("entered into else");
     localStorage.removeItem("token");
-    console.log(
-      "entered into else",
-      axios.defaults.headers.common["access_token"]
-    );
+    delete axios.defaults.headers.common["x-auth-token"];
   }
 };

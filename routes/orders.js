@@ -30,6 +30,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:order_id", async (req, res, next) => {
+  console.log("entered into get One Order");
   try {
     const order = await Order.findOne({ _id: req.params.order_id });
     res.status(200).json(order);
