@@ -30,7 +30,6 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:order_id", async (req, res, next) => {
-  console.log("entered into get One Order");
   try {
     const order = await Order.findOne({ _id: req.params.order_id });
     res.status(200).json(order);
@@ -40,8 +39,6 @@ router.get("/:order_id", async (req, res, next) => {
 });
 
 router.get("/user/:id", verifyToken, verifyUser, async (req, res, next) => {
-  console.log("entered into get order by userid", req.params);
-  console.log("orders in", req.params.id);
   try {
     const orders = await Order.find({ user: req.user.id });
     res.status(200).json(orders);
@@ -51,11 +48,10 @@ router.get("/user/:id", verifyToken, verifyUser, async (req, res, next) => {
 });
 
 router.put(
-  "/:order_id/:id",
+  "/paid/:order_id/:id",
   verifyToken,
   verifyUser,
   async (req, res, next) => {
-    console.log("req.body in put", req.body);
     try {
       // const product = await Product.findOne({ _id: req.params.post_id });
       const updatedOrder = await Order.findOneAndUpdate(
@@ -70,8 +66,30 @@ router.put(
         },
         { new: true }
       );
+      res.status(200).json(updatedOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-      console.log("updated order in routes", updatedOrder);
+router.put(
+  "/delivered/:order_id",
+  verifyToken,
+  verifyUser,
+  async (req, res, next) => {
+    try {
+      // const product = await Product.findOne({ _id: req.params.post_id });
+      const updatedOrder = await Order.findOneAndUpdate(
+        { razporpayOrderId: req.params.order_id },
+        {
+          $set: {
+            isDelivered: req.body.isDelivered,
+            deliveredAt: req.body.deliveredAt,
+          },
+        },
+        { new: true }
+      );
       res.status(200).json(updatedOrder);
     } catch (error) {
       next(error);

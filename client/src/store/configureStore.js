@@ -23,19 +23,51 @@ export const store = configureStore({
   },
 });
 
-let currentState = store.getState();
+let {
+  auth: currentAuthState,
+  alert: currentAlertState,
+  product: currentProductState,
+  cart: currentCartState,
+  order: currentOrderState,
+  users: currentUsersState,
+  admin: currentAdminState,
+  orders: currentOrdersState,
+} = store.getState();
 
+let previousAuthState = currentAuthState;
+let previousCartState = currentCartState;
 store.subscribe(() => {
   // keep track of the previous and current state to compare changes
-  let previousState = currentState;
-  currentState = store.getState();
+  let {
+    auth: currentAuthState,
+    alert: currentAlertState,
+    product: currentProductState,
+    cart: currentCartState,
+    order: currentOrderState,
+    users: currentUsersState,
+    admin: currentAdminState,
+    orders: currentOrdersState,
+  } = store.getState();
 
   // if the token changes set the value in localStorage and axios headers
-  if (previousState.auth.token !== currentState.auth.token) {
-    console.log("previousState.auth.token", previousState.auth.token);
-    console.log("currentState", currentState);
-    console.log("currentstate.auth.token", currentState.auth.token);
-    localStorage.setItem("token", currentState.auth.token);
-    setAuthToken(currentState.auth.token);
+  if (previousAuthState.token !== currentAuthState.token) {
+    localStorage.setItem("token", currentAuthState.token);
+    setAuthToken(currentAuthState.token);
+  }
+
+  if (previousCartState.cartItems != currentCartState.cartItems) {
+    console.log("previousCartState.cartItems", previousCartState.cartItems);
+    console.log("currentCartState.cartItems", currentCartState);
+    localStorage.setItem("cart", JSON.stringify(currentCartState.cartItems));
+  }
+  if (previousCartState.shippingAddress != currentCartState.shippingAddress) {
+    console.log(
+      "previousCartState.shippingAddress",
+      previousCartState.shippingAddress
+    );
+    localStorage.setItem(
+      "shippingAddress",
+      JSON.stringify(currentCartState.shippingAddress)
+    );
   }
 });

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { getOrderById } from "../actions/order-action";
 import useFetch from "../hooks/useFetchHooks";
 import Spinner from "./Spinner";
+import { markAsDeliveredAction } from "../actions/order-action";
 
 const AdminOrderView = () => {
   const { order_id } = useParams();
@@ -19,6 +20,17 @@ const AdminOrderView = () => {
   console.log("error", error);
 
   console.log("data in AdminOrderView", data);
+
+  const dispatch = useDispatch();
+  const markAsDelivered = () => {
+    const updateDeliveryStatusData = {
+      isDelivered: true,
+      deliveredAt: new Date().toISOString(),
+    };
+    dispatch(
+      markAsDeliveredAction(data.razporpayOrderId, updateDeliveryStatusData)
+    );
+  };
   return (
     <Fragment>
       {loading && <Spinner />}
@@ -54,6 +66,36 @@ const AdminOrderView = () => {
                 View invoice
                 <span aria-hidden="true"> &rarr;</span>
               </a>
+            </div>
+            <div className="flex justify-between my-10">
+              <div className="text-xl font-bold mr-4">
+                <span className="mr-2">paid</span>
+                <span>
+                  {data.isPaid ? (
+                    <i class="fa-solid fa-check text-green-600 text-xl"></i>
+                  ) : (
+                    <i class="fa-solid fa-xmark text-red-600 text-xl"></i>
+                  )}
+                </span>
+              </div>
+              <div className="text-xl font-bold mr-4">
+                <span className="mr-2">Delivered</span>
+                <span>
+                  {data.isDelivered ? (
+                    <i class="fa-solid fa-check text-green-600 text-xl"></i>
+                  ) : (
+                    <i class="fa-solid fa-xmark text-red-600 text-xl"></i>
+                  )}
+                </span>
+              </div>
+              <button
+                disabled={data.isDelivered}
+                onClick={markAsDelivered}
+                to="/payment"
+                className=" rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 inline-block w-80 "
+              >
+                Mark as Delivered
+              </button>
             </div>
             <div className="mt-6">
               <h2 className="sr-only">Products purchased</h2>

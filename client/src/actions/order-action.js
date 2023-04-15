@@ -32,12 +32,26 @@ export const updatePaymentStatus =
         axios.defaults.headers.common
       );
       const response = await axios.put(
-        `http://localhost:4000/api/orders/${updateOrderData.razorpay_order_id}/${user_id}`,
+        `http://localhost:4000/api/orders/paid/${updateOrderData.razorpay_order_id}/${user_id}`,
         updateOrderData
       );
       console.log("after upating payment data in api", response.data);
       dispatch(updateOrder(response.data));
       sendOrderId(response.data._id);
+    } catch (error) {
+      console.log("error in createorder", error);
+    }
+  };
+
+export const markAsDeliveredAction =
+  (order_id, updateOrderData) => async (dispatch) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/orders/delivered/${order_id}`,
+        updateOrderData
+      );
+      console.log("after upating payment data in api", response.data);
+      dispatch(updateOrder(response.data));
     } catch (error) {
       console.log("error in createorder", error);
     }
