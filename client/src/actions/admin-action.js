@@ -14,15 +14,16 @@ export const getProducts = () => async (dispatch) => {
 };
 
 export const addProduct = (formData) => async (dispatch) => {
+  console.log("entered into addProduct");
   try {
     const response = await axios.post(
       `http://localhost:4000/api/products/`,
       formData
     );
 
-    console.log("response.data in addProduct action", response.data);
     dispatch(updateProducts(response.data));
+    return response.data;
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 };

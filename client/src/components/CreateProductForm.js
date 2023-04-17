@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../actions/admin-action";
+import { useNavigate } from "react-router-dom";
 
 const CreateProductForm = () => {
   const formValidationSchema = yup.object({
@@ -25,6 +26,7 @@ const CreateProductForm = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -38,8 +40,13 @@ const CreateProductForm = () => {
     },
     validationSchema: formValidationSchema,
     onSubmit: (values) => {
-      console.log("entered into handlesubmit", values);
-      dispatch(addProduct(values));
+      dispatch(addProduct({ ...formik.values }))
+        .then((data) => {
+          navigate("/products");
+        })
+        .catch((error) => {
+          console.log("error in createProductForm", error);
+        });
     },
   });
 
