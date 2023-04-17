@@ -71,7 +71,7 @@ router.get("/getallproducts", async (req, res, next) => {
   console.log("pageSize in backend", req.query.pageNumber);
   console.log("keyword in backend", req.query.keyword);
   try {
-    const pageSize = 2;
+    const pageSize = 10;
     const page = Number(req.query.pageNumber) || 1;
     const keyword = req.query.keyword
       ? {
@@ -82,14 +82,12 @@ router.get("/getallproducts", async (req, res, next) => {
         }
       : {};
 
-    console.log("keyword", { ...keyword });
-    console.log("pageSize", pageSize);
     const count = await Product.countDocuments({ ...keyword });
-    console.log("count", count);
+
     const products = await Product.find({ ...keyword })
       .limit(pageSize)
       .skip(pageSize * (page - 1));
-    console.log("products in getall products", products);
+
     res
       .status(200)
       .json({ products, page, pages: Math.ceil(count / pageSize) });

@@ -8,6 +8,7 @@ import orderRoute from "./routes/orders.js";
 import productRoute from "./routes/products.js";
 import cors from "cors";
 import paymentRoute from "./routes/Payment.js";
+import morgan from "morgan";
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 mongoose.set("strictQuery", false);
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 connectDB();
 

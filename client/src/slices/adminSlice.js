@@ -15,8 +15,18 @@ export const productsSlice = createSlice({
         isLoading: false,
       };
     },
+    updateProducts: (state, action) => {
+      if (state.products) {
+        state.products.push(action.payload);
+      } else {
+        return {
+          products: [...action.payload],
+          isLoading: false,
+        };
+      }
+    },
   },
 });
 
-export const { productsLoadingSuccess } = productsSlice.actions;
+export const { productsLoadingSuccess, updateProducts } = productsSlice.actions;
 export default productsSlice.reducer;

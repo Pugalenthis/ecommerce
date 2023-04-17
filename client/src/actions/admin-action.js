@@ -1,5 +1,5 @@
 import axios from "axios";
-import { productsLoadingSuccess } from "../slices/adminSlice";
+import { productsLoadingSuccess, updateProducts } from "../slices/adminSlice";
 
 export const getProducts = () => async (dispatch) => {
   try {
@@ -10,5 +10,19 @@ export const getProducts = () => async (dispatch) => {
     dispatch(productsLoadingSuccess(response.data));
   } catch (error) {
     console.log("error in getUsers", error);
+  }
+};
+
+export const addProduct = (formData) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:4000/api/products/`,
+      formData
+    );
+
+    console.log("response.data in addProduct action", response.data);
+    dispatch(updateProducts(response.data));
+  } catch (error) {
+    console.log(error);
   }
 };
