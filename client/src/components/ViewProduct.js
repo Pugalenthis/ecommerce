@@ -4,6 +4,8 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { getProduct } from "../actions/product-action";
 import Spinner from "./Spinner";
 import { addItemToCart } from "../slices/cartSlice";
+import { setAlert } from "../slices/alertSlice";
+import { setAlertAction } from "../actions/alert";
 
 const ViewProduct = () => {
   const { id } = useParams();
@@ -24,6 +26,7 @@ const ViewProduct = () => {
       qty: +qtyInputRef.current.value,
     });
     dispatch(addItemToCart({ ...product, qty: +qtyInputRef.current.value }));
+    dispatch(setAlertAction("Added to Cart", "green"));
   };
 
   const onSubmitHandler = (e) => {

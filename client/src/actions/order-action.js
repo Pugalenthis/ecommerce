@@ -1,6 +1,6 @@
 // import
 
-import axios from "axios";
+import api from "../utils/api";
 import { addItemToCart } from "../slices/cartSlice";
 import { addOrder, updateOrder } from "../slices/orderSlice";
 
@@ -8,11 +8,8 @@ export const createOrderAction =
   (razorpayOrderData, customizedOrderData, initPayment) => async (dispatch) => {
     console.log("customizedOrderData", customizedOrderData);
     try {
-      console.log(
-        "axios.defaults.headers.common",
-        axios.defaults.headers.common
-      );
-      const response = await axios.post(
+      console.log("api.defaults.headers.common", api.defaults.headers.common);
+      const response = await api.post(
         `http://localhost:4000/api/orders/${customizedOrderData.user}`,
         customizedOrderData
       );
@@ -27,11 +24,8 @@ export const updatePaymentStatus =
   (updateOrderData, user_id, sendOrderId) => async (dispatch) => {
     console.log("updateOrderData", updateOrderData);
     try {
-      console.log(
-        "axios.defaults.headers.common",
-        axios.defaults.headers.common
-      );
-      const response = await axios.put(
+      console.log("api.defaults.headers.common", api.defaults.headers.common);
+      const response = await api.put(
         `http://localhost:4000/api/orders/paid/${updateOrderData.razorpay_order_id}/${user_id}`,
         updateOrderData
       );
@@ -46,7 +40,7 @@ export const updatePaymentStatus =
 export const markAsDeliveredAction =
   (order_id, updateOrderData) => async (dispatch) => {
     try {
-      const response = await axios.put(
+      const response = await api.put(
         `http://localhost:4000/api/orders/delivered/${order_id}`,
         updateOrderData
       );
@@ -59,7 +53,7 @@ export const markAsDeliveredAction =
 
 export const getOrderById = (orderId) => async () => {
   try {
-    const response = await axios.get(
+    const response = await api.get(
       `http://locahost:4000/api/orders/${orderId}`
     );
     console.log("response in getOrderById", response.data);

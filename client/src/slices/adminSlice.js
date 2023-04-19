@@ -15,7 +15,7 @@ export const productsSlice = createSlice({
         isLoading: false,
       };
     },
-    updateProducts: (state, action) => {
+    addProduct: (state, action) => {
       if (state.products) {
         state.products.push(action.payload);
       } else {
@@ -25,8 +25,26 @@ export const productsSlice = createSlice({
         };
       }
     },
+    // updateProduct: (state, action) => {
+    //   return {
+    //     products:state.products.map(())
+    //   }
+    // },
+    deleteProduct: (state, action) => {
+      return {
+        products: state.products.filter(
+          (product) => action.payload != product._id
+        ),
+        isLoading: false,
+      };
+    },
   },
 });
 
-export const { productsLoadingSuccess, updateProducts } = productsSlice.actions;
+export const {
+  productsLoadingSuccess,
+  addProduct,
+  deleteProduct,
+  updateProduct,
+} = productsSlice.actions;
 export default productsSlice.reducer;

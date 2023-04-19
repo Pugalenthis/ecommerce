@@ -129,7 +129,21 @@ const Cart = () => {
                     </li>
                   );
                 })}
-              {cartItems.length == 0 && <h1>No products added to the cart</h1>}
+              {cartItems.length == 0 && (
+                <div className="flex justify-center   items-center flex-col space-y-4">
+                  <img
+                    className="w-56"
+                    src="https://thumbs.dreamstime.com/b/shopping-cart-sad-5662438.jpg"
+                    alt=""
+                  />
+                  <h1 className="font-extrabold text-4xl text-red-600">
+                    oops!
+                  </h1>
+                  <p className="font-bold text-2xl">
+                    Your Cart Is Empty.......
+                  </p>
+                </div>
+              )}
             </ul>
           </section>
 

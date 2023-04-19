@@ -20,6 +20,7 @@ const AdminOrderView = () => {
   console.log("error", error);
 
   console.log("data in AdminOrderView", data);
+  console.log("loading in AdminOrderView", loading);
 
   const dispatch = useDispatch();
   const markAsDelivered = () => {
@@ -88,14 +89,16 @@ const AdminOrderView = () => {
                   )}
                 </span>
               </div>
-              <button
-                disabled={data.isDelivered}
-                onClick={markAsDelivered}
-                to="/payment"
-                className=" rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 inline-block w-80 "
-              >
-                Mark as Delivered
-              </button>
+              {!data.isDelivered && (
+                <button
+                  disabled={data.isDelivered}
+                  onClick={markAsDelivered}
+                  to="/payment"
+                  className=" rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 inline-block w-80 "
+                >
+                  Mark as Delivered
+                </button>
+              )}
             </div>
             <div className="mt-6">
               <h2 className="sr-only">Products purchased</h2>

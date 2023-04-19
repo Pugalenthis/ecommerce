@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getUsers } from "../actions/users-action";
 import Spinner from "./Spinner";
 
@@ -43,13 +44,13 @@ const UsersList = () => {
             )}
           </td>
           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+            <Link
+              to={`/user/${user._id}`}
+              className="text-indigo-600 hover:text-indigo-900"
+            >
               <i class="fa-solid fa-pen-to-square"></i>
               <span className="sr-only">, </span>
-            </a>
-            <a href="#" className="text-red-600 hover:text-red-900 ml-2">
-              Delete<span className="sr-only">, </span>
-            </a>
+            </Link>
           </td>
         </tr>
       );

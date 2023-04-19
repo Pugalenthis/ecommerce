@@ -135,7 +135,7 @@ router.delete(
 
 router.put("/:product_id", verifyToken, verifyAdmin, async (req, res, next) => {
   try {
-    // const product = await Product.findOne({ _id: req.params.post_id });
+    const product = await Product.findOne({ _id: req.params.post_id });
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: req.params.product_id },
       {

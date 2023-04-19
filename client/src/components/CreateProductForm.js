@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../actions/admin-action";
+import { addProductAction } from "../actions/admin-action";
 import { useNavigate } from "react-router-dom";
 
 const CreateProductForm = () => {
@@ -40,7 +40,7 @@ const CreateProductForm = () => {
     },
     validationSchema: formValidationSchema,
     onSubmit: (values) => {
-      dispatch(addProduct({ ...formik.values }))
+      dispatch(addProductAction({ ...formik.values }))
         .then((data) => {
           navigate("/products");
         })

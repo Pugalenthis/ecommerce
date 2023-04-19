@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getProducts } from "../actions/admin-action";
+import { deleteProductAction, getProducts } from "../actions/admin-action";
 import Spinner from "./Spinner";
 
 const ProductsList = () => {
@@ -15,6 +15,11 @@ const ProductsList = () => {
   console.log("products in productList", products);
 
   let content = [];
+
+  const deleteProductHandler = (product_id) => {
+    console.log("deleteProductHandler");
+    dispatch(deleteProductAction(product_id));
+  };
 
   if (isLoading) {
     content = <Spinner />;
@@ -45,12 +50,19 @@ const ProductsList = () => {
             {product.brand}
           </td>
           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+            <Link
+              to={`/editproduct/${product._id}`}
+              className="text-indigo-600 hover:text-indigo-900"
+            >
               Edit<span className="sr-only">, </span>
-            </a>
-            <a href="#" className="text-red-600 hover:text-red-900 ml-2">
+            </Link>
+            <button
+              type="button"
+              onClick={() => deleteProductHandler(product._id)}
+              className="text-red-600 hover:text-red-900 ml-2"
+            >
               Delete<span className="sr-only">, </span>
-            </a>
+            </button>
           </td>
         </tr>
       );

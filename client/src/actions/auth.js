@@ -1,11 +1,11 @@
 import { loginSuccess, logOut } from "../slices/authSlice";
-import axios from "axios";
+import api from "../utils/setAuthToken";
 import { setAlertAction } from "./alert";
 import { setAuthToken } from "../utils/setAuthToken";
 
 export const login = (formData) => async (dispatch) => {
   try {
-    const response = await axios.post(
+    const response = await api.post(
       "http://localhost:4000/api/users/login",
       formData
     );
@@ -23,7 +23,7 @@ export const login = (formData) => async (dispatch) => {
 
 export const register = (formData) => async (dispatch) => {
   try {
-    const response = await axios.post(
+    const response = await api.post(
       "http://localhost:4000/api/users/register",
       formData
     );
@@ -41,7 +41,7 @@ export const register = (formData) => async (dispatch) => {
 
 export const loadUser = () => async (dispatch) => {
   try {
-    const response = await axios.get("http://localhost:4000/api/users/user");
+    const response = await api.get("http://localhost:4000/api/users/user");
     console.log("response in loadUser", response.data);
     dispatch(loginSuccess(response.data));
   } catch (error) {

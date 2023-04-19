@@ -31,6 +31,7 @@ import Myorders from "./components/myOrders";
 import AdminOrderView from "./components/AdminOrderView";
 import PrivateRoute from "./components/PrivateRoute";
 import NotFound from "./components/NotFound";
+import EditProductForm from "./components/EditProductForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -40,10 +41,10 @@ function App() {
 
   useEffect(() => {
     // check for token in localstorage and if exists sets in header for all request
-
-    if (localStorage.getItem("token") !== null) {
-      console.log("token in useeffect app.js", localStorage.token);
-      setAuthToken(localStorage.token);
+    const token = localStorage.getItem("token");
+    console.log("token in app.js", token);
+    if (token) {
+      setAuthToken(token);
       dispatch(loadUser());
     }
   }, []);
@@ -77,8 +78,9 @@ function App() {
         </PrivateRoute>
       }
     />,
-    <Route path="/approveadmin" element={<ApproveAdmin />} />,
+    <Route path="/user/:user_id" element={<ApproveAdmin />} />,
     <Route path="/createproduct" element={<CreateProductForm />} />,
+    <Route path="/editproduct/:product_id" element={<EditProductForm />} />,
   ];
 
   return (

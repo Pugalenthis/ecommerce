@@ -11,11 +11,14 @@ const Alert = () => {
           const color = alert.alertType;
 
           return (
-            <div key={alert.id} className={`rounded-md bg-${color}-400 p-4`}>
+            <div
+              key={alert.id}
+              className={`rounded-md text-${color}-600 bg-${color}-600 p-4`}
+            >
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg
-                    className={`h-5 w-5 text-${color}-400`}
+                    className={`h-5 w-5 text-${color}-600`}
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     aria-hidden="true"
