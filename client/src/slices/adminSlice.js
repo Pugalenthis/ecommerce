@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
   products: null,
@@ -26,9 +26,18 @@ export const productsSlice = createSlice({
       }
     },
     // updateProduct: (state, action) => {
+    //   console.log(
+    //     "state in updateproduct reducer",
+    //     current(state),
+    //     action.payload
+    //   );
+
     //   return {
-    //     products:state.products.map(())
-    //   }
+    //     products: state.products.map(
+    //       (product) => product._id == action.payload
+    //     ),
+    //     isLoading: false,
+    //   };
     // },
     deleteProduct: (state, action) => {
       return {
@@ -45,6 +54,6 @@ export const {
   productsLoadingSuccess,
   addProduct,
   deleteProduct,
-  updateProduct,
+  // updateProduct,
 } = productsSlice.actions;
 export default productsSlice.reducer;

@@ -43,6 +43,9 @@ const EditProductForm = () => {
         .then((data) => {
           navigate("/products");
         })
+        .then((data) => {
+          navigate("/products");
+        })
         .catch((error) => {
           console.log("error in createProductForm", error);
         });

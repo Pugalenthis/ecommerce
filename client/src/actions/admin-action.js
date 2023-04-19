@@ -3,6 +3,7 @@ import {
   deleteProduct,
   productsLoadingSuccess,
   addProduct,
+  updateProduct,
 } from "../slices/adminSlice";
 import { setAlertAction } from "./alert";
 
@@ -15,6 +16,7 @@ export const getProducts = () => async (dispatch) => {
     dispatch(productsLoadingSuccess(response.data));
   } catch (error) {
     console.log("error in getUsers", error);
+    dispatch(setAlertAction("Something went wrong", "red"));
   }
 };
 
@@ -26,6 +28,7 @@ export const addProductAction = (formData) => async (dispatch) => {
       formData
     );
 
+    dispatch(setAlertAction("product created Successfully", "green"));
     dispatch(addProduct(response.data));
     return response.data;
   } catch (error) {
@@ -36,12 +39,14 @@ export const addProductAction = (formData) => async (dispatch) => {
 export const updateProductAction = (productData) => async (dispatch) => {
   console.log("entered into addProduct");
   try {
-    const response = await api.post(
+    const response = await api.put(
       `http://localhost:4000/api/products/${productData._id}`,
       productData
     );
+    console.log("response.data in updateproductaction", response.data);
 
     // dispatch(updateProduct(response.data));
+    dispatch(setAlertAction("product edited successfully", "green"));
     return response.data;
   } catch (error) {
     throw new Error(error);
